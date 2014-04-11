@@ -44,8 +44,6 @@ function roku {
     echo "------------"
     echo
 
-    echo $key
-
     if [[ $key == w ]]; then
       curl -d "" http://$ROKU_IP:8060/keypress/Up
     elif [[ $key == s ]]; then

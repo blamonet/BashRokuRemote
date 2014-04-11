@@ -1,14 +1,19 @@
 #! /bin/bash
+#export ROKU_IP="10.0.1.9"
+
 function find_roku {
+  echo "Finding Roku..."
   for i in $(arp -a | awk '{print $2}' | sed "s/[(|)]//g"); do 
-    curl $i:8060 &>/dev/null
-    if [[ "$?" == "0" ]]; then 
+    ct=`curl --max-time 1 -s $i:8060 | grep -i roku | wc -l`
+    if [[ $ct -gt 1 ]]; then 
       export ROKU_IP=$i
+      echo "Roku IP is $i"
     fi
   done
 }
 
 function roku {
+  echo "Welcome to the Roku Bash Remote!"
 
   if [[ ! $ROKU_IP ]]; then 
     find_roku; 
@@ -26,10 +31,10 @@ function roku {
   while [ TRUE ]; do
     echo
     echo "------------"
-    echo "k) Up"
-    echo "j) Down"
-    echo "h) Left"
-    echo "l) Right"
+    echo "w) Up"
+    echo "a) Left"
+    echo "d) Right"
+    echo "s) Down"
     echo "v) Select"
     echo "x) Play"
     echo "b) Back"
@@ -39,14 +44,15 @@ function roku {
     echo "------------"
     echo
 
-    if [[ $key == k ]]; then
-      echo up
+    echo $key
+
+    if [[ $key == w ]]; then
       curl -d "" http://$ROKU_IP:8060/keypress/Up
-    elif [[ $key == j ]]; then
+    elif [[ $key == s ]]; then
       curl -d "" http://$ROKU_IP:8060/keypress/Down
-    elif [[ $key == h ]]; then
+    elif [[ $key == a ]]; then
       curl -d "" http://$ROKU_IP:8060/keypress/Left
-    elif [[ $key == l ]]; then
+    elif [[ $key == d ]]; then
       curl -d "" http://$ROKU_IP:8060/keypress/Right
     elif [[ $key == v ]]; then
       curl -d "" http://$ROKU_IP:8060/keypress/Select

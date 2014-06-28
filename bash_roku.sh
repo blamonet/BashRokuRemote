@@ -38,6 +38,7 @@ function roku {
     echo "v) Select"
     echo "x) Play"
     echo "b) Back"
+    echo "h) Home"
     echo "q) Quit"
 
     read -n 1 key
@@ -58,6 +59,8 @@ function roku {
       curl -d "" http://$ROKU_IP:8060/keypress/Play
     elif [[ $key == b ]]; then
       curl -d "" http://$ROKU_IP:8060/keypress/Back
+    elif [[ $key == h ]]; then
+      curl -d "" http://$ROKU_IP:8060/keypress/Home
     elif [[ $key == q ]]; then
       return 0
     fi
